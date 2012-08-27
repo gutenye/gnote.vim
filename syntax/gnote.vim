@@ -3,45 +3,45 @@ if exists('b:current_syntax')
 endif
 let b:current_syntax='gnote'
 
-" ywsmall "{{{1
 syn cluster gnoteAll_c contains=gnoteKeyword,gnoteTitle,gnoteSubTitle,gnoteSymbol,gnoteIgnore,gnoteNormal,gnoteJumpTo,gnoteComment,gnotehighlight
 syn match gnoteIgnore "^#gnote#$\|#{{{\|#}}}" 
 syn region gnoteNormal  start=+´+ end=+´+ 
-syn region gnoteJumpTo  matchgroup=gnoteIgnore start="Г" end="Г"
-hi gnoteJumpTo cterm=underline
-syn match gnoteSep "-\{6\}-*"
-hi gnoteSep ctermfg=5
 
-																"}}}1
-" keywords "{{{1
+syn match gnoteHyperTextJump	"∥[^∗∥]\+∥" contains=gnoteBar
+syn match gnoteHyperTextEntry	"∗[^∗∥]\+∗\s"he=e-1 contains=gnoteStar
+syn match gnoteHyperTextEntry	"∗[^∗∥]\+∗$" contains=gnoteStar
+syn match gnoteBar		contained "∥" conceal
+syn match gnoteStar		contained "∗" conceal
+
 syn keyword gnoteKeyword 
    \ ywman ywvs ywnok ywok yweg 
    \ ywor ywand ywthen ywso
    \ ywguts ywsec ywread ywuse ywsee ywsmall ywbad
    \ SAME_AS ONLY_AT
-hi gnoteKeyword ctermfg=5
-" not <== ==> <==>. confict
+
 syn match gnoteSymbol "^|\|^: "
+syn match gnoteKeySymbol "∷\|∶" 
+syn region gnoteTitle   matchgroup=gnoteIgnore start="¤"  end="¤" oneline
+syn region gnoteSubTitle matchgroup=gnoteIgnore start="º" end="º" oneline
+syn region gnoteHighlight matchgroup=gnoteIgnore start="ĥ" end="ĥ" oneline
+syn region gnoteComment matchgroup=gnoteNormal start='(' end=')' oneline contains=@gnoteAll_c
+syn region gnoteComment matchgroup=gnoteIgnore start='«' end='»' contains=@gnoteAll_c
+
+hi gnoteJumpTo cterm=underline
+hi gnoteSep ctermfg=5
+hi gnoteKeyword ctermfg=5
 " hi gnoteSymbol ctermfg=5 
 hi link gnoteSymbol Comment
-syn match gnoteKeySymbol "∷\|∶" 
 hi gnoteKeySymbol ctermfg=5
-"}}}1
-" title "{{{1
-syn region gnoteTitle   matchgroup=gnoteIgnore start="¤"  end="¤" oneline
-	hi gnoteTitle ctermfg=5
-syn region gnoteSubTitle matchgroup=gnoteIgnore start="º" end="º" oneline
-	hi gnoteSubTitle ctermfg=6
-syn region gnoteHighlight matchgroup=gnoteIgnore start="ĥ" end="ĥ" oneline
-	hi gnotehighlight ctermfg=11
+hi gnoteTitle ctermfg=5
+hi gnoteSubTitle ctermfg=6
+hi gnotehighlight ctermfg=11
+hi def link gnoteIgnore Ignore
+hi def link gnoteComment Comment
+hi def link gnoteNormal Normal
+hi def link gnoteHyperTextJump	helpHyperTextJump
+hi def link gnoteHyperTextEntry	helpHyperTextEntry
 
-"}}}1
-" comment "{{{1
-	syn region gnoteComment matchgroup=gnoteNormal start='(' end=')' oneline contains=@gnoteAll_c
-	syn region gnoteComment matchgroup=gnoteIgnore start='«' end='»' contains=@gnoteAll_c
-"}}}1
-" hi link "{{{1
-hi link gnoteIgnore Ignore
-hi link gnoteComment Comment
-hi link gnoteNormal Normal
-"}}}1
+" tmp
+hi Ignore ctermfg=234
+
