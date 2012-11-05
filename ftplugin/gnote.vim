@@ -17,6 +17,9 @@ endfor
 
 setlocal iskeyword+=-
 
+" list bullet
+imap <buffer> <expr> * gnote#insert_bullet('*')
+
 set foldmethod=marker commentstring=#%s
 set foldtext=Gfoldtext('\\v¤\|º\|`\|ĥ\|∗')
 " set updatetime=1000
