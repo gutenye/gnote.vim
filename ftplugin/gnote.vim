@@ -15,6 +15,10 @@ for i in range(1,4)
 	exec cmd
 endfor 
 
+" abbr 
+iabbr nt ¤¤<left>
+iabbr ns ºº<left>
+
 setlocal iskeyword+=-
 
 " list bullet
