@@ -1,0 +1,18 @@
+source "https://rubygems.org"
+#source "http://ruby.taobao.org"
+
+gem "pd"
+gem "tagen", :path => "/home/guten/dev/one/tagen"
+gem "optimism", :path => "/home/guten/dev/one/optimism"
+gem "pa", :path => "/home/guten/dev/one/pa"
+gem "thor"
+gem "rb-inotify"
+
+group :development do
+  gem "rspec"
+  gem "guard"
+  gem "guard-rspec"
+  #gem "rag", :path => "/home/guten/dev/one/rag"
+end
+
+#gemspec
