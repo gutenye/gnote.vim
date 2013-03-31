@@ -32,6 +32,7 @@ OPTIONS
       --cache              # per-file tags cache directory
 `
 func main(){
+	Ui = log.New(os.Stdout, "", 0)
 	pflag.Usage = func() {
 		Ui.Print(USAGE)
 	}
@@ -46,7 +47,6 @@ func main(){
 		os.Exit(0)
 	}
 
-	Ui = log.New(os.Stdout, "", 0)
 	if os2.IsExist(homeRc) {
 		d, e := ioutil.ReadFile(homeRc)
 		if e != nil { Ui.Fatal(e) }

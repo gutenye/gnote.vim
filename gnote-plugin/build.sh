@@ -10,7 +10,7 @@
 #
 # Example:
 #
-#   ./build.sh -d /usr/share/milkd    # build with system go
+#   ./build.sh -d /usr/share/foo      # build with system go
 #   ./build.sh release                # build $RELEASEs with user complied go and upload the package to s3.
 
 APP="gnote"
@@ -21,7 +21,7 @@ declare -A OS_MAP=(
 	[homebrew]="darwin"
 )
 declare -A DIR_MAP=(
-	[homebrew]="/usr/share/milkd"
+	[homebrew]="/usr/share/$APP"
 )
 
 platform=""
@@ -31,10 +31,6 @@ assets_dir=""
 
 function cgo_enabled { [ "$1" == "$GOHOSTOS" ] && echo 1 || echo 0; }
 function ext { [ $1 == "windows" ] && echo .exe || echo ""; }
-
-function removeFmt() {
-}
-
 
 # dist{platform, os, arch, assets_dir}
 function dist {
@@ -49,37 +45,36 @@ function dist {
 
 # build{platform, os, arch, assets_dir}
 function build {
+	rsync -a --del --exclude '.*' . /tmp/$APP/
+
 	echo -e "\nbuilding $platform/$arch"
-	#rsync -v -a --del --exclude '.*' . "/tmp/$APP/"
+	find -name '*.go' | xargs sed -i 's|^import . "github.com/GutenYe/tagen.go/pd".*||'
+	CGO_ENABLED=$(cgo_enabled $os) GOOS=$os GOARCH=$arch $GOROOT/bin/go build -o "dist/$APP$(ext $os)"
 
-	#sed -i '/^var HOME/s/.*/var HOME = os.Getenv("HOME")/' main.go
-	#sed -i 's/^import . "github.com/GutenYe/tagen.go/pd".*//' **/*.go
-	CGO_ENABLED=$(cgo_enabled $os) GOOS=$os GOARCH=$arch $GOROOT/bin/go build -o "dist/milkd$(ext $os)"
-
-	#rsync -v -a "/tmp/$APP/" .
+	rsync -a /tmp/$APP/ .
 }
 
 # package{platform, os, arch}
 function package {
 	echo "packing $platform/$arch" 
-	mkdir dist/milkd-$VERSION
-	cp -r dist/* dist/milkd-$VERSION 2>/dev/null
+	mkdir dist/$APP-$VERSION
+	cp -r dist/* dist/$APP-$VERSION 2>/dev/null
 
 	case $os in
 		linux | darwin )
-			tar zcvf milkd.$platform.$arch-$VERSION.tar.gz -C dist milkd-$VERSION;;
+			tar zcvf $APP.$platform.$arch-$VERSION.tar.gz -C dist $APP-$VERSION;;
 		windows ) 
-			rm ../milkd.$platform.$arch.zip 2>/dev/null
-			cd dist && zip -r ../milkd.$platform.$arch.zip milkd-$VERSION && cd ..
+			rm ../$APP.$platform.$arch.zip 2>/dev/null
+			cd dist && zip -r ../$APP.$platform.$arch.zip $APP-$VERSION && cd ..
 			;;
 	esac
 }
 
 function upload {
 	for file in $*; do
-		s3cmd put --acl-public $file s3://downloads.gutenye.com/milkd/
+		s3cmd put --acl-public $file s3://downloads.gutenye.com/$APP/
 		#current=$(echo $file | sed -r 's/(.*)-[0-9.]+(\..*)$/\1\2/')
-		#s3cmd copy s3://downloads.gutenye.com/milkd/$file s3://downloads.gutenye.com/milkd/$current
+		#s3cmd copy s3://downloads.gutenye.com/$APP/$file s3://downloads.gutenye.com/$APP/$current
 	done
 }
 
