@@ -10,18 +10,24 @@ import (
 )
 
 func skipFile(path string) bool {
-	info, _ := os.Lstat(path)
-	fileName := filepath.Base(path)
-
 	// tags 
 	// .*
 	// backup~
-	return info.IsDir() ||
-		info.Mode() & os.ModeSymlink != 0 ||
-		filepath.Ext(path) != ".gnote" ||
+
+	// try non-read-disk first
+	fileName := filepath.Base(path)
+	if filepath.Ext(path) != ".gnote" ||
 		fileName == "tags" ||
 		fileName[0] == '.' ||
-		fileName[len(fileName)-1] == '~'
+		fileName[len(fileName)-1] == '~' {
+			return true
+	}
+
+	info, e := os.Lstat(path)
+	// no such file error
+	if e != nil { return true }
+	return info.IsDir() ||
+		info.Mode() & os.ModeSymlink != 0
 }
 
 func Tags() {
@@ -53,7 +59,7 @@ func Tags() {
 }
 
 func Watch() {
-	Ui.Printf("Watching %s\n", Rc.Dir)
+	Ui.Printf("WATCHING %s\n", Rc.Dir)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil { Ui.Panic(err) }
 	err = filepath.Walk(Rc.Dir, func(p string, i os.FileInfo, e error) error {
@@ -68,26 +74,30 @@ func Watch() {
 	for {
 		select {
 		case ev := <-watcher.Event:
-			Ui.Print(ev)
+			//Ui.Print(ev)
 			if ev.IsCreate() {
 				info, err := os.Stat(ev.Name)
+				if os.IsNotExist(err) { continue }
 				if err != nil { Ui.Panic(err) }
 				if info.IsDir() {
 					watcher.Watch(ev.Name)
 				}
 			}
 
+			if skipFile(ev.Name) {
+				continue
+			}
+
 			rel, err := filepath.Rel(Rc.Dir, ev.Name)
 			if err != nil { Ui.Panic(err) }
 			switch {
 			case ev.IsCreate() || ev.IsModify():
-				if skipFile(ev.Name) {
-					continue
-				}
+				Ui.Printf("GENERATE CACHE TAGS %s", ev.Name)
 				err := GenerateCacheTags(rel, Rc.Dir, Rc.Cache, Rc.Mark)
 				if err != nil { Ui.Panic(err) }
 			case ev.IsDelete():
 				err := os.Remove(filepath.Join(Rc.Cache, rel))
+				if os.IsNotExist(err) { continue }
 				if err != nil { Ui.Panic(err) }
 			}
 			err = ConcatCacheTags(Rc.Cache, Rc.Usertags, Rc.Output)

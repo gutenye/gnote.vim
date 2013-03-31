@@ -20,22 +20,26 @@ var homeConfig = filepath.Join(os.Getenv("HOME"), ".gnote")
 var USAGE = `$ gnote <cmd> [options]
 
 COMMAND:
-	tags
-	watch
+  tags                     # generate tags file
+  watch                    # watch note directory
 
-GENERIC OPTIONS
-	-v, --version
-	-h, --help
+OPTIONS
+  -v, --version
+  -h, --help
+      --dir                # note directory
+      --output             # output 'tags' file path
+      --mark               # mark character
+      --cache              # per-file tags cache directory
 `
 func main(){
 	pflag.Usage = func() {
 		Ui.Print(USAGE)
 	}
 	var version = pflag.BoolP("version", "v", false, "print version number")
-	var dir = pflag.StringP("dir", "", "~/note", "note directory")
+	var dir = pflag.StringP("dir", "", "", "note directory")
 	var output = pflag.StringP("output", "", "", "output file")
-	var cache = pflag.StringP("cache", "", "", "cahce directory")
 	var mark = pflag.StringP("mark", "", "", "mark character")
+	var cache = pflag.StringP("cache", "", "", "cahce directory")
 	pflag.Parse()
 	if *version {
 		Ui.Printf("gnote %s", VERSION)

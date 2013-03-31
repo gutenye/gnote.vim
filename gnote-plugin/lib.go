@@ -8,13 +8,11 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-	. "./globals/ui"
 )
 
 // Generate a cache tag from a file
 func GenerateCacheTags(relName, dir, cache, mark string) error {
 	file := filepath.Join(dir, relName)
-	Ui.Printf("GENERATE CACHE TAGS %s", file)
 	absFile, err := filepath.Abs(file)
 	if err != nil { return err }
 	cacheFile := filepath.Join(cache, relName)

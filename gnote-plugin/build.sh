@@ -11,9 +11,9 @@
 # Example:
 #
 #   ./build.sh -d /usr/share/milkd    # build with system go
-#   ./build.sh release                         # build $RELEASEs with user complied go and upload the package to s3.
+#   ./build.sh release                # build $RELEASEs with user complied go and upload the package to s3.
 
-APP="gnote-plugin"
+APP="gnote"
 EXTRA_FILES=""
 RELEASE="homebrew/amd64 homebrew/386 windows/386 windows/amd64"
 VERSION=$(sed -rn 's/.*const VERSION.*"([0-9.]+)".*/\1/p' main.go)
