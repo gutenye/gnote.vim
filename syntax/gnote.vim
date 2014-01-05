@@ -48,4 +48,5 @@ hi def link gnoteListNumber Comment
 hi def link gnoteModeLine LineNr
 
 " FIXME
+hi Folded cterm=NONE ctermfg=244 ctermbg=234
 hi Ignore ctermfg=234
