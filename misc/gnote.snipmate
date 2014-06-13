@@ -16,3 +16,7 @@ snippet c
 	«${1}»${2}
 snippet es
 	´${1}´${2}
+snippet t
+	¤${1}¤${2}
+snippet s
+	º${1}º${2}

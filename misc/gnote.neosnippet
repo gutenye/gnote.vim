@@ -1,0 +1,32 @@
+snippet b
+	∙${1}∙
+
+snippet i
+	∘${1}∘
+
+snippet u
+	―${1}―
+
+snippet h1
+	∏${1}∏
+
+snippet h2
+	∏∏${1}∏∏
+
+snippet l
+	∥${1}∥
+
+snippet e
+	∗${1}∗
+
+snippet c
+	«${1}»
+
+snippet es
+	´${1}´
+
+snippet t
+	¤${1}¤
+
+snippet s
+	º${1}º

@@ -3,19 +3,21 @@ if exists("b:did_gnote_ftplugin")
 endif
 let b:did_gnote_ftplugin = 1
 
+setlocal expandtab
 setlocal conceallevel=2 concealcursor=nc
 
-" abbr 
-iabbr nt ¤¤<left>
-iabbr ns ºº<left>
+" abbr
+"iabbr nt ¤¤<left>
+"iabbr ns ºº<left>
+"iabbr nc «»<left>
 
 setlocal iskeyword+=-
 
 " list bullet
 imap <buffer> <expr> * gnote#insert_bullet('*')
 
-"" Fold 
-set foldmethod=marker 
+"" Fold
+set foldmethod=marker
 set commentstring=#%s
 set fillchars="fold:\ "
 set foldtext=GNotefoldtext('\\v¤\|º\|`\|ĥ\|∗\|«\|»')
@@ -32,11 +34,11 @@ endfunc
 for i in range(1,4)
 	let cmd=printf("iabbr <buffer> {{%s #{{{%s<C-R>=Eatchar('\s')<CR>",i,i)
 	exec cmd
-endfor 
+endfor
 for i in range(1,4)
 	let cmd=printf("iabbr <buffer> }}%s #}}}%s<C-R>=Eatchar('\s')<CR>",i,i)
 	exec cmd
-endfor 
+endfor
 
 " set updatetime=1000
 " exec 'autocmd CursorHold '.expand('%:p').' write'
