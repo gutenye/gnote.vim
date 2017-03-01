@@ -43,3 +43,16 @@ endfor
 " set updatetime=1000
 " exec 'autocmd CursorHold '.expand('%:p').' write'
 " exec 'autocmd InsertLeave '.expand('%:p').' write'
+
+
+command Cmp :call s:compare(<f-arg>)
+func! s:compare(args) "{{{1
+  " edit fb
+  " vnew fa
+  a:args
+	" in Edit_cmds
+	if has_key(g:Edit_cmds, a:cmd)
+		exec g:Edit_cmds[a:cmd]
+		return
+	endif
+endfunc
