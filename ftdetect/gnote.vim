@@ -1,1 +1,1 @@
-au! BufNewFile,BufRead *.gnote				setfiletype gnote
+au! BufNewFile,BufRead *.gnote setfiletype gnote

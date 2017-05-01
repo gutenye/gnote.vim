@@ -49,7 +49,7 @@ command Cmp :call s:compare(<f-arg>)
 func! s:compare(args) "{{{1
   " edit fb
   " vnew fa
-  a:args
+  " a:args
 	" in Edit_cmds
 	if has_key(g:Edit_cmds, a:cmd)
 		exec g:Edit_cmds[a:cmd]
