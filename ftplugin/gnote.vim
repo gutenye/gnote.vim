@@ -19,7 +19,7 @@ imap <buffer> <expr> * gnote#insert_bullet('*')
 "" Fold
 set foldmethod=marker
 set commentstring=#%s
-set fillchars="fold:\ "
+set fillchars=fold:\ 
 set foldtext=GNotefoldtext('\\v¤\|º\|ĥ\|∗\|«\|»')
 func! GNotefoldtext(hidden)
 	let pattern = substitute(&commentstring, '%s', '{{{\\d', 'g')
